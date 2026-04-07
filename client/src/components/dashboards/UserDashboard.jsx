@@ -223,45 +223,49 @@ const UserDashboard = () => {
             <AnimatePresence>
                 {upiModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[200] flex items-center justify-center p-6">
-                        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-white rounded-[3.5rem] w-full max-w-lg p-12 space-y-10 shadow-2xl relative overflow-hidden">
+                        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-white rounded-[3.5rem] w-full max-w-lg p-12 space-y-8 shadow-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="text-center space-y-2 relative z-10">
-                                <div className="w-20 h-20 bg-primary-600 rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-primary-500/20 mb-6 rotate-6 hover:rotate-0 transition-transform">
-                                    <Zap className="text-white w-10 h-10" />
+                            
+                            <div className="flex justify-between items-start relative z-10">
+                                <div className="space-y-1">
+                                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Direct UPI Hub</h3>
+                                    <p className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em]">Pay via GPay / PhonePe / Paytm</p>
                                 </div>
-                                <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight">Direct UPI Hub</h3>
-                                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-relaxed">Pay directly via GPay / PhonePe / Paytm pulse</p>
+                                <button onClick={() => setUpiModal(null)} className="p-3 bg-slate-50 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"><X className="w-5 h-5" /></button>
                             </div>
-
-                            <div className="bg-slate-50 rounded-3xl p-8 space-y-6 relative z-10 border-2 border-slate-100">
-                                <div className="flex justify-between items-center border-b border-slate-200 pb-4">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount Pulse</span>
-                                    <span className="text-2xl font-black text-slate-900">₹{upiModal.price}</span>
+                            
+                            <div className="bg-slate-50 rounded-[2.5rem] p-10 space-y-8 relative z-10 border border-slate-100">
+                                <div className="text-center space-y-2">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Total Amount Pulse</p>
+                                    <p className="text-5xl font-black text-slate-900 select-none">₹{upiModal.price}</p>
                                 </div>
-                                <div className="space-y-3">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Expert's UPI Identity</p>
-                                    <div className="flex items-center justify-between bg-white border border-slate-200 p-4 rounded-2xl">
-                                        <span className="font-mono font-bold text-primary-600">{upiModal.upiId}</span>
-                                        <button onClick={() => { navigator.clipboard.writeText(upiModal.upiId); alert('UPI Pulse Copied Hub'); }} className="p-2 text-slate-400 hover:text-primary-600 transition-all"><Copy className="w-5 h-5" /></button>
+
+                                <div className="space-y-4 pt-6 border-t border-slate-200/50">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] text-center">Expert UPI Identity</p>
+                                    <div className="bg-white border-2 border-primary-100 p-6 rounded-3xl flex items-center justify-between shadow-sm group hover:border-primary-500 transition-all">
+                                        <div className="flex items-center space-x-4">
+                                            <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center text-primary-600 font-black"><Zap className="w-5 h-5" /></div>
+                                            <span className="font-mono font-black text-slate-800 text-lg tracking-wider">{upiModal.upiId}</span>
+                                        </div>
+                                        <button 
+                                            onClick={() => { navigator.clipboard.writeText(upiModal.upiId); alert('UPI Pulse Copied Hub'); }} 
+                                            className="p-3 text-slate-300 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all active:scale-90"
+                                        >
+                                            <Copy className="w-5 h-5" />
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="w-48 h-48 bg-white mx-auto rounded-3xl flex items-center justify-center border-4 border-slate-100 shadow-inner group">
-                                    <div className="text-slate-200 text-center space-y-2">
-                                        <Zap className="w-12 h-12 mx-auto opacity-20 group-hover:scale-110 transition-transform" />
-                                        <p className="text-[8px] font-black uppercase tracking-widest">[QR MOCK HUB]</p>
-                                    </div>
-                                </div>
                             </div>
 
-                            <div className="space-y-4 relative z-10">
+                            <div className="space-y-4 relative z-10 pt-4">
                                 <button 
                                     onClick={() => handleConfirmPayment(upiModal.bookingId)}
-                                    className="w-full py-5 bg-primary-600 text-white font-black rounded-2xl shadow-xl shadow-primary-500/20 hover:bg-primary-500 transition-all space-x-3 flex items-center justify-center text-sm uppercase tracking-widest"
+                                    className="w-full py-6 bg-slate-900 text-white font-black rounded-3xl shadow-2xl shadow-slate-900/20 hover:bg-primary-600 transition-all flex items-center justify-center space-x-3 text-sm uppercase tracking-[0.2em] group"
                                 >
-                                    <Check  className="w-5 h-5" />
-                                    <span>I Have Transmitted Funds</span>
+                                    <Check  className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                                    <span>Signal Payment Sent</span>
                                 </button>
-                                <button onClick={() => setUpiModal(null)} className="w-full text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-slate-600 transition-colors">Cancel Portal Action</button>
+                                <p className="text-center text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed px-4">Ensure the payment is completed in your UPI app before confirming here.</p>
                             </div>
                         </motion.div>
                     </motion.div>

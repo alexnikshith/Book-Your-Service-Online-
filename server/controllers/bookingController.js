@@ -101,12 +101,44 @@ const getMyBookings = asyncHandler(async (req, res) => {
 const updateBookingStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
   const booking = await Booking.findById(req.params.id);
+
   if (!booking) {
     res.status(404);
     throw new Error('Booking pulse node not found');
   }
+
+  // Permission Check: Admin or the actual Provider involved
+  if (req.user.role !== 'admin' && req.user.providerId?.toString() !== booking.provider.toString()) {
+    res.status(403);
+    throw new Error('Not authorized to update this service pulse');
+  }
+
+  const oldStatus = booking.status;
   booking.status = status;
   await booking.save();
+
+  // Notify Client if status was updated by provider
+  if (oldStatus !== status) {
+    let title = 'Service Pulse Updated';
+    let message = `Your service request for ${booking.serviceName} is now ${status}.`;
+
+    if (status === 'accepted') {
+      title = 'Request Accepted: Expert Node Engaged';
+      message = `Great news! The expert has accepted your request for ${booking.serviceName}. You can now proceed with escrow settlement.`;
+    } else if (status === 'declined') {
+      title = 'Request Declined: Expert Pulse Unavailable';
+      message = `The expert is unable to fulfill your request for ${booking.serviceName} at this time.`;
+    }
+
+    await Notification.create({
+      user: booking.user,
+      type: 'booking_update',
+      title: title,
+      message: message,
+      link: '/dashboard'
+    });
+  }
+
   res.json(booking);
 });
 

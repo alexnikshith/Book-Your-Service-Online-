@@ -214,7 +214,7 @@ const ProviderDashboard = () => {
                                                      {booking.status === 'pending' && (
                                                          <>
                                                              <button onClick={() => updateStatus(booking._id, 'accepted')} className="px-8 h-16 bg-primary-600 text-white font-black rounded-2xl hover:bg-primary-500 transition-all shadow-xl shadow-primary-500/20 active:scale-95 uppercase tracking-widest text-[10px]">Accept Job</button>
-                                                             <button onClick={() => updateStatus(booking._id, 'rejected')} className="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center"><X className="w-6 h-6" /></button>
+                                                             <button onClick={() => updateStatus(booking._id, 'declined')} className="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center"><X className="w-6 h-6" /></button>
                                                          </>
                                                      )}
                                                      {booking.status === 'accepted' && (
@@ -231,7 +231,7 @@ const ProviderDashboard = () => {
                                              <div className="mt-8 pt-8 border-t border-slate-50 flex items-center space-x-10 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                                                  <div className="flex items-center space-x-3"><Calendar className="w-4 h-4 text-primary-400" /> <span>{new Date(booking.date).toLocaleDateString()}</span></div>
                                                  <div className="flex items-center space-x-3"><Clock className="w-4 h-4 text-primary-400" /> <span>{booking.time}</span></div>
-                                                 <div className="flex items-center space-x-3"><DollarSign className="w-4 h-4 text-primary-400" /> <span className="text-slate-900 text-sm">₹{booking.totalPrice}</span></div>
+                                                 <div className="flex items-center space-x-3"><div className="w-4 h-4 bg-primary-50 rounded-lg flex items-center justify-center text-primary-400 font-black text-[10px]">₹</div> <span className="text-slate-900 text-sm">₹{booking.totalPrice}</span></div>
                                              </div>
                                          </div>
                                      ))}

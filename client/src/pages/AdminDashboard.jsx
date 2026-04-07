@@ -14,8 +14,7 @@ import {
     AlertCircle,
     CheckCircle2,
     Clock,
-    MapPin,
-    DollarSign
+    MapPin
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 

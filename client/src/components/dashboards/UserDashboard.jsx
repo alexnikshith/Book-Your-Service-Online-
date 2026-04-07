@@ -65,7 +65,8 @@ const UserDashboard = () => {
             case 'completed': return 'bg-green-100 text-green-700 border-green-200';
             case 'confirmed': return 'bg-blue-100 text-blue-700 border-blue-200';
             case 'pending': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-            case 'cancelled': return 'bg-red-100 text-red-700 border-red-200';
+            case 'accepted': return 'bg-indigo-100 text-indigo-700 border-indigo-200';
+            case 'declined': return 'bg-red-100 text-red-700 border-red-200';
             case 'held_in_escrow': return 'bg-primary-50 text-primary-700 border-primary-200';
             default: return 'bg-slate-100 text-slate-700 border-slate-200';
         }
@@ -74,7 +75,8 @@ const UserDashboard = () => {
     const getStatusIcon = (status) => {
         switch (status) {
             case 'completed': return <CheckCircle className="w-4 h-4" />;
-            case 'accepted': return <Clock className="w-4 h-4" />;
+            case 'accepted': return <CheckCircle className="w-4 h-4 text-indigo-500" />;
+            case 'declined': return <XCircle className="w-4 h-4 text-red-500" />;
             case 'pending': return <Clock4 className="w-4 h-4" />;
             case 'cancelled': return <XCircle className="w-4 h-4" />;
             default: return null;

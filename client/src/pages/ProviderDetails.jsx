@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import API from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
-import { MapPin, Star, Calendar, Clock, ShieldCheck, CheckCircle, ChevronLeft, ArrowRight, User, DollarSign, Activity, Briefcase, MessageSquare, Zap, Flag, AlertTriangle, ShieldAlert, Video, Camera, CreditCard, Lock, Unlock, Download } from 'lucide-react';
+import { MapPin, Star, Calendar, Clock, ShieldCheck, CheckCircle, ChevronLeft, ArrowRight, User, Activity, Briefcase, MessageSquare, Zap, Flag, AlertTriangle, ShieldAlert, Video, Camera, CreditCard, Lock, Unlock, Download } from 'lucide-react';
 import ReviewForm from '../components/reviews/ReviewForm';
 import ReviewList from '../components/reviews/ReviewList';
 import ChatWindow from '../components/ChatWindow';

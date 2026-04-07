@@ -34,14 +34,16 @@ const UserDashboard = () => {
     }, []);
 
     const cancelBooking = async (bookingId) => {
-        if (!window.confirm('Are you sure you want to cancel this booking pulse?')) return;
-        try {
-            await API.put(`/bookings/${bookingId}/status`, { status: 'cancelled' });
-            setBookings(bookings.map(b => b._id === bookingId ? { ...b, status: 'cancelled' } : b));
-        } catch (err) {
-            console.error(err);
-            showToast('Cancellation Failed: ' + (err.response?.data?.message || err.message), 'error');
-        }
+        showConfirm('Are you sure you want to cancel this booking pulse?', async () => {
+            try {
+                await API.put(`/bookings/${bookingId}/status`, { status: 'cancelled' });
+                showToast('Booking Cancelled Successfully', 'success');
+                setBookings(bookings.map(b => b._id === bookingId ? { ...b, status: 'cancelled' } : b));
+            } catch (err) {
+                console.error(err);
+                showToast('Cancellation Failed: ' + (err.response?.data?.message || err.message), 'error');
+            }
+        });
     };
 
     const handleConfirmPayment = async (id) => {
@@ -55,15 +57,16 @@ const UserDashboard = () => {
         }
     };
 
-    const handleRelease = async (id) => {
-        if (!window.confirm('Are you sure the expert hub has completed the work pulse? Funds will be settled instantly.')) return;
-        try {
-            await API.put(`/bookings/${id}/release`);
-            showToast('Milestone transmission successful. Funds released!', 'success');
-            fetchBookings();
-        } catch (err) {
-            showToast('Release Registry Hub Busy: ' + (err.response?.data?.message || err.message), 'error');
-        }
+    const releaseFunds = async (id) => {
+        showConfirm('Are you sure the expert hub has completed the work pulse? Funds will be settled instantly.', async () => {
+            try {
+                await API.put(`/bookings/${id}/release`);
+                showToast('Milestone transmission successful. Funds released!', 'success');
+                fetchBookings();
+            } catch (err) {
+                showToast('Release Registry Hub Busy: ' + (err.response?.data?.message || err.message), 'error');
+            }
+        });
     };
 
     const getStatusStyle = (status) => {
@@ -180,7 +183,7 @@ const UserDashboard = () => {
                                    
                                    {booking.paymentStatus === 'held_in_escrow' && (
                                        <button 
-                                            onClick={() => handleRelease(booking._id)}
+                                            onClick={() => releaseFunds(booking._id)}
                                             className="w-full py-4 bg-green-600 text-white font-black rounded-2xl shadow-xl shadow-green-500/20 hover:bg-green-500 transition-all uppercase tracking-widest text-[10px] flex items-center justify-center space-x-2"
                                        >
                                             <CheckCircle className="w-4 h-4" />

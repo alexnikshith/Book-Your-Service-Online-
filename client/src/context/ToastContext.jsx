@@ -8,6 +8,7 @@ export const useToast = () => useContext(ToastContext);
 
 export const ToastProvider = ({ children }) => {
     const [toasts, setToasts] = useState([]);
+    const [confirm, setConfirm] = useState(null); // { message, onConfirm, onCancel }
 
     const showToast = useCallback((message, type = 'success') => {
         const id = Date.now();
@@ -15,6 +16,14 @@ export const ToastProvider = ({ children }) => {
         setTimeout(() => {
             setToasts(prev => prev.filter(t => t.id !== id));
         }, 5000);
+    }, []);
+
+    const showConfirm = useCallback((message, onConfirm) => {
+        setConfirm({ 
+            message, 
+            onConfirm: () => { onConfirm(); setConfirm(null); },
+            onCancel: () => setConfirm(null)
+        });
     }, []);
 
     const removeToast = (id) => {
@@ -40,8 +49,30 @@ export const ToastProvider = ({ children }) => {
     };
 
     return (
-        <ToastContext.Provider value={{ showToast }}>
+        <ToastContext.Provider value={{ showToast, showConfirm }}>
             {children}
+            
+            {/* Global High-Fidelity Confirmation Modal Hub */}
+            <AnimatePresence>
+                {confirm && (
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-slate-900/80 backdrop-blur-xl z-[4000] flex items-center justify-center p-6">
+                        <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-white rounded-[3rem] w-full max-w-md p-10 space-y-8 shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                            <div className="flex flex-col items-center text-center space-y-4 relative z-10">
+                                <div className="w-16 h-16 bg-primary-50 text-primary-600 rounded-2xl flex items-center justify-center"><AlertCircle className="w-8 h-8" /></div>
+                                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">System Authorization</h3>
+                                <p className="text-sm font-bold text-slate-500 leading-relaxed">{confirm.message}</p>
+                            </div>
+                            <div className="flex flex-col space-y-3 relative z-10">
+                                <button onClick={confirm.onConfirm} className="w-full py-5 bg-slate-900 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] hover:bg-primary-600 transition-all shadow-xl shadow-slate-900/10">Proceed with Pulse</button>
+                                <button onClick={confirm.onCancel} className="w-full py-4 text-slate-400 font-bold uppercase tracking-widest text-[10px] hover:text-slate-600 transition-all">Abort Action</button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Existing Toast Stack */}
             <div className="fixed top-24 right-10 z-[3000] flex flex-col space-y-4 pointer-events-none w-80">
                 <AnimatePresence>
                     {toasts.map((toast) => (

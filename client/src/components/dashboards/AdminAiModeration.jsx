@@ -111,7 +111,7 @@ const AdminAiModeration = () => {
                                              <p className="text-[11px] font-medium text-slate-500 leading-relaxed italic">"{report.content}"</p>
                                              {report.relatedMessage?.imageUrl && (
                                                  <div className="mt-4 rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all border border-slate-100">
-                                                     <img src={`http://localhost:5000${report.relatedMessage.imageUrl}`} alt="Evidence Hub" className="w-full h-auto object-cover max-h-24" />
+                                                     <img src={`${import.meta.env.MODE === 'production' ? window.location.origin : 'http://localhost:5000'}${report.relatedMessage.imageUrl}`} alt="Evidence Hub" className="w-full h-auto object-cover max-h-24" />
                                                  </div>
                                              )}
                                          </div>

@@ -193,7 +193,7 @@ const ProviderDetails = () => {
                              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 relative z-10">
                                  {provider.portfolioImages?.length > 0 ? provider.portfolioImages.map((img, i) => (
                                      <div key={i} className="aspect-square bg-white/5 rounded-[2.5rem] border border-white/10 overflow-hidden group/img relative cursor-pointer">
-                                         <img src={`http://localhost:5000${img.url}`} alt={img.caption} className="w-full h-full object-cover grayscale active:grayscale-0 group-hover/img:grayscale-0 group-hover/img:scale-110 transition-all duration-700" />
+                                         <img src={`${import.meta.env.MODE === 'production' ? window.location.origin : 'http://localhost:5000'}${img.url}`} alt={img.caption} className="w-full h-full object-cover grayscale active:grayscale-0 group-hover/img:grayscale-0 group-hover/img:scale-110 transition-all duration-700" />
                                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity p-6 flex items-end">
                                              <p className="text-[9px] font-black text-white uppercase tracking-widest leading-relaxed">{img.caption}</p>
                                          </div>

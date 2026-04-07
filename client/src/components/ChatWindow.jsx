@@ -5,7 +5,7 @@ import API from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+const socket = io(import.meta.env.MODE === 'production' ? window.location.origin : 'http://localhost:5000');
 
 const ChatWindow = ({ recipientId, recipientName, onClose }) => {
     const { user } = useContext(AuthContext);
@@ -27,7 +27,8 @@ const ChatWindow = ({ recipientId, recipientName, onClose }) => {
         if (url.startsWith('http')) return url;
         // Strip leading slash if any to prevent double-pulse //
         const cleanUrl = url.startsWith('/') ? url.substring(1) : url;
-        return `http://localhost:5000/${cleanUrl}`;
+        const base = import.meta.env.MODE === 'production' ? window.location.origin : 'http://localhost:5000';
+        return `${base}/${cleanUrl}`;
     };
 
     useEffect(() => {

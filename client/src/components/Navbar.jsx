@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { MapPin, User, LogOut, Search, Menu, X, Bell } from 'lucide-react';
+import { MapPin, User, LogOut, Search, Menu, X, Bell, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import socket from '../utils/socket';
+import API from '../api/axios';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -27,7 +29,34 @@ const Navbar = () => {
     };
 
     React.useEffect(() => {
+        if (!user) return;
         fetchNotifications();
+
+        // Join personal room for pulses
+        socket.emit('join_room', user._id.toString());
+
+        const handleNewNotification = (data) => {
+            setNotifications(prev => [data, ...prev]);
+            // Optional: You could trigger a browser toast here Hub
+        };
+
+        const handleNewMessagePulse = (data) => {
+             // If we want a notification for messages too
+             setNotifications(prev => [{
+                 title: 'Secure Correspondence',
+                 message: `Node signal received: ${data.content.substring(0, 30)}...`,
+                 isRead: false,
+                 _id: Date.now()
+             }, ...prev]);
+        };
+
+        socket.on('receive_notification', handleNewNotification);
+        socket.on('receive_message', handleNewMessagePulse);
+
+        return () => {
+            socket.off('receive_notification', handleNewNotification);
+            socket.off('receive_message', handleNewMessagePulse);
+        };
     }, [user]);
 
     const handleSearch = (e) => {

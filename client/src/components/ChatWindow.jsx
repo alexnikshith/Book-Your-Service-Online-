@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, User, MessageSquare, ShieldCheck, X, Zap, Phone, Loader2, Trash2, Edit3, Image as ImageIcon, Camera, AlertTriangle, Bell, Clock, ShieldAlert } from 'lucide-react';
 import API from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
-import io from 'socket.io-client';
+import socket from '../utils/socket';
 
-const socket = io(import.meta.env.MODE === 'production' ? window.location.origin : 'http://localhost:5000');
+// Global socket utility imported above
 
 const ChatWindow = ({ recipientId, recipientName, onClose }) => {
     const { user } = useContext(AuthContext);

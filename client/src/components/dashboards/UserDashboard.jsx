@@ -4,6 +4,7 @@ import { Calendar, Clock, MapPin, CheckCircle, Clock4, XCircle, Star, MessageSqu
 import { motion, AnimatePresence } from 'framer-motion';
 import ReviewForm from '../reviews/ReviewForm';
 import ChatWindow from '../ChatWindow';
+import socket from '../../utils/socket';
 
 const UserDashboard = () => {
     const [bookings, setBookings] = useState([]);
@@ -25,6 +26,9 @@ const UserDashboard = () => {
 
     useEffect(() => {
         fetchBookings();
+
+        socket.on('booking_updated', fetchBookings);
+        return () => socket.off('booking_updated', fetchBookings);
     }, []);
 
     const cancelBooking = async (bookingId) => {

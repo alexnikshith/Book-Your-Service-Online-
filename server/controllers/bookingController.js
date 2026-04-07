@@ -139,7 +139,19 @@ const updateBookingStatus = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json(booking);
+    // Real-time Push via Socket.io Hub
+    const io = req.app.get('io');
+    if (io) {
+      io.to(booking.user.toString()).emit('receive_notification', {
+        title,
+        message,
+        type: 'booking_update',
+        timestamp: new Date()
+      });
+      io.to(booking.user.toString()).emit('booking_updated', booking);
+    }
+
+    res.json(booking);
 });
 
 module.exports = {

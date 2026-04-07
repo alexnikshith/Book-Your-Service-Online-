@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import API from '../../api/axios';
+import socket from '../../utils/socket';
 import { AuthContext } from '../../context/AuthContext';
 import { Check, X, Clock, Settings, User, DollarSign, Calendar, MapPin, ChevronRight, Activity, TrendingUp, AlertCircle, Loader2, Star, Bell, MessageSquare, ShieldCheck, Mail, Zap, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -50,7 +51,11 @@ const ProviderDashboard = () => {
     };
 
     useEffect(() => {
-        if (authUser) fetchData();
+        if (authUser) {
+            fetchData();
+            socket.on('booking_updated', fetchData);
+            return () => socket.off('booking_updated', fetchData);
+        }
     }, [authUser]);
 
     const handleSave = async () => {

@@ -34,6 +34,9 @@ const io = new Server(server, {
   }
 });
 
+// Inject io into app to be accessible in controllers
+app.set('io', io);
+
 // Middleware
 app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));

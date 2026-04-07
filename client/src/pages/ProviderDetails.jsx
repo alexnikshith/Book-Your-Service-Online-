@@ -198,10 +198,19 @@ const ProviderDetails = () => {
                                              <p className="text-[9px] font-black text-white uppercase tracking-widest leading-relaxed">{img.caption}</p>
                                          </div>
                                      </div>
-                                 )) : [1,2,3].map(i => (
-                                     <div key={i} className="aspect-square bg-white/5 rounded-[2.5rem] border border-white/5 flex flex-col items-center justify-center space-y-4 opacity-30">
-                                         <ShieldCheck className="w-10 h-10" />
-                                         <span className="text-[9px] font-black uppercase tracking-widest">Evidence Node Pending</span>
+                                 )) : [
+                                     { url: '/images/defaults/plumbing.png', caption: 'High-Fidelity Plumbing Node' },
+                                     { url: '/images/defaults/electrician.png', caption: 'Precision Electrical Node' },
+                                     { url: '/images/defaults/ac.png', caption: 'Certified AC Cooling Node' }
+                                 ].map((img, i) => (
+                                     <div key={i} className="aspect-square bg-slate-800 rounded-[2.5rem] border border-white/5 overflow-hidden group/img relative opacity-40 hover:opacity-100 transition-all duration-700">
+                                         <img src={img.url} alt={img.caption} className="w-full h-full object-cover grayscale active:grayscale-0 group-hover/img:grayscale-0 group-hover/img:scale-110 transition-all duration-700" />
+                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity p-6 flex items-end">
+                                             <div className="space-y-1">
+                                                 <p className="text-[9px] font-black text-primary-400 uppercase tracking-widest">{img.caption}</p>
+                                                 <p className="text-[7px] font-bold text-white/50 uppercase tracking-widest">Verified Default Evidence</p>
+                                             </div>
+                                         </div>
                                      </div>
                                  ))}
                              </div>

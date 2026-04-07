@@ -5,9 +5,11 @@ import { MapPin, User, LogOut, Search, Menu, X, Bell, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import socket from '../utils/socket';
 import API from '../api/axios';
+import { useToast } from '../context/ToastContext';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
+    const { showToast } = useToast();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = React.useState(false);
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -37,17 +39,19 @@ const Navbar = () => {
 
         const handleNewNotification = (data) => {
             setNotifications(prev => [data, ...prev]);
-            // Optional: You could trigger a browser toast here Hub
+            showToast(data.message || 'New System Signal Received', 'info');
         };
 
         const handleNewMessagePulse = (data) => {
              // If we want a notification for messages too
-             setNotifications(prev => [{
+             const notif = {
                  title: 'Secure Correspondence',
                  message: `Node signal received: ${data.content.substring(0, 30)}...`,
                  isRead: false,
                  _id: Date.now()
-             }, ...prev]);
+             };
+             setNotifications(prev => [notif, ...prev]);
+             showToast(notif.message, 'info');
         };
 
         socket.on('receive_notification', handleNewNotification);

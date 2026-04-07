@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+  
+  .glass-dark {
+    @apply bg-slate-900/40 backdrop-blur-md border border-slate-700/30 shadow-2xl;
+  }
+  
+  .btn-primary {
+    @apply px-6 py-2.5 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-2.5 bg-white text-primary-600 border border-primary-100 font-semibold rounded-xl hover:bg-primary-50 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-sm;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-400 focus:border-transparent outline-none transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+}
+
+/* Page Transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms, transform 300ms;
+}

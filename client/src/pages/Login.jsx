@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { Mail, Lock, LogIn, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useToast } from '../context/ToastContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const Login = () => {
     const [role, setRole] = useState('user');
     const [showPassword, setShowPassword] = useState(false);
     const { login, user, loading, error } = useContext(AuthContext);
+    const { showToast } = useToast();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,13 +23,15 @@ const Login = () => {
         
         // [SOVEREIGN GUARD]: Selective Admin Access Protocol
         if (role === 'admin' && email.toLowerCase().trim() !== 'nikshithgurram2006@gmail.com') {
-            alert("Security Breach Pulse: You are not an authorized Administrative Node. Access is restricted to the Central Sovereign Email (nikshithgurram2006@gmail.com).");
+            showToast("Security Breach Pulse: You are not an authorized Administrative Node. Access is restricted to the Central Sovereign Email (nikshithgurram2006@gmail.com).", "error");
             return;
         }
 
         try {
             await login(email, password, role);
-        } catch (err) {}
+        } catch (err) {
+            showToast(err.response?.data?.message || 'Login Matrix Busy: Pulse Refused', 'error');
+        }
     };
 
     return (

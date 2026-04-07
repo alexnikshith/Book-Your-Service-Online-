@@ -19,8 +19,10 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AdminAiModeration from './AdminAiModeration';
+import { useToast } from '../../context/ToastContext';
 
 const AdminDashboard = () => {
+    const { showToast } = useToast();
     const [activeTab, setActiveTab] = useState('overview'); 
     const [stats, setStats] = useState({ users: 0, providers: 0, bookings: 0, revenue: 0 });
     const [providers, setProviders] = useState([]);
@@ -55,9 +57,11 @@ const AdminDashboard = () => {
     const toggleStatus = async (id, currentStatus) => {
         try {
             await API.put(`/admin/providers/${id}/status`, { isApproved: !currentStatus });
+            showToast(`Expert Hub Status: ${!currentStatus ? 'AUTHORIZED' : 'SUSPENDED'} Pulse`, 'success');
             fetchData();
         } catch (err) {
             console.error(err);
+            showToast('Authorization Toggle Hub Busy: ' + (err.response?.data?.message || err.message), 'warning');
         }
     };
 
@@ -66,7 +70,7 @@ const AdminDashboard = () => {
             await API.put(`/admin/users/${userId}/role`, { role: newRole });
             fetchData();
         } catch (err) {
-            alert(err.response?.data?.message || 'Role Update Pulse Failed Hub');
+            showToast(err.response?.data?.message || 'Role Update Pulse Failed Hub', 'error');
         }
     };
 

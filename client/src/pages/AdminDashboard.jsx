@@ -17,9 +17,11 @@ import {
     MapPin
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from '../context/ToastContext';
 
 const AdminDashboard = () => {
     const { user } = useContext(AuthContext);
+    const { showToast } = useToast();
     const [stats, setStats] = useState({ users: 0, providers: 0, bookings: 0, revenue: 0 });
     const [providers, setProviders] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
@@ -63,9 +65,10 @@ const AdminDashboard = () => {
     const handleRoleChange = async (userId, newRole) => {
         try {
             await API.put(`/admin/users/${userId}/role`, { role: newRole });
+            showToast('Role Update Pulse Successful', 'success');
             fetchData();
         } catch (err) {
-            alert(err.response?.data?.message || 'Role Update Failed');
+            showToast(err.response?.data?.message || 'Role Update Pulse Failed Hub', 'error');
         }
     };
 

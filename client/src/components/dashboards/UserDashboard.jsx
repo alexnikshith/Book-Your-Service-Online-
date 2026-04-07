@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReviewForm from '../reviews/ReviewForm';
 import ChatWindow from '../ChatWindow';
 import socket from '../../utils/socket';
+import { useToast } from '../../context/ToastContext';
 
 const UserDashboard = () => {
+    const { showToast } = useToast();
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedBookingForReview, setSelectedBookingForReview] = useState(null);
@@ -38,7 +40,7 @@ const UserDashboard = () => {
             setBookings(bookings.map(b => b._id === bookingId ? { ...b, status: 'cancelled' } : b));
         } catch (err) {
             console.error(err);
-            alert('Cancellation Failed: ' + (err.response?.data?.message || err.message));
+            showToast('Cancellation Failed: ' + (err.response?.data?.message || err.message), 'error');
         }
     };
 
@@ -46,10 +48,10 @@ const UserDashboard = () => {
         try {
             await API.put(`/bookings/${id}/escrow`); // Using existing portal but logically as direct confirmation
             setUpiModal(null);
-            alert('Sovereign Hub: Direct Payment Confirmed. The expert has been notified of your transmission pulse!');
+            showToast('Direct Payment Confirmed. The expert has been notified!', 'success');
             fetchBookings();
         } catch (err) {
-            alert('Confirmation Pulse Hub Busy: ' + (err.response?.data?.message || err.message));
+            showToast('Confirmation Hub Busy: ' + (err.response?.data?.message || err.message), 'warning');
         }
     };
 
@@ -57,10 +59,10 @@ const UserDashboard = () => {
         if (!window.confirm('Are you sure the expert hub has completed the work pulse? Funds will be settled instantly.')) return;
         try {
             await API.put(`/bookings/${id}/release`);
-            alert('Sovereign Hub: Milestone transmission successful. Funds released Hub!');
+            showToast('Milestone transmission successful. Funds released!', 'success');
             fetchBookings();
         } catch (err) {
-            alert('Release Registry Hub Busy: ' + (err.response?.data?.message || err.message));
+            showToast('Release Registry Hub Busy: ' + (err.response?.data?.message || err.message), 'error');
         }
     };
 
@@ -248,7 +250,7 @@ const UserDashboard = () => {
                                             <span className="font-mono font-black text-slate-800 text-lg tracking-wider">{upiModal.upiId}</span>
                                         </div>
                                         <button 
-                                            onClick={() => { navigator.clipboard.writeText(upiModal.upiId); alert('UPI Pulse Copied Hub'); }} 
+                                            onClick={() => { navigator.clipboard.writeText(upiModal.upiId); showToast('UPI Copied to Clipboard', 'info'); }} 
                                             className="p-3 text-slate-300 hover:text-primary-600 hover:bg-primary-50 rounded-xl transition-all active:scale-90"
                                         >
                                             <Copy className="w-5 h-5" />

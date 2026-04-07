@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import API from '../../api/axios';
 import socket from '../../utils/socket';
+import { useToast } from '../../context/ToastContext';
 import { AuthContext } from '../../context/AuthContext';
 import { Check, X, Clock, Settings, User, DollarSign, Calendar, MapPin, ChevronRight, Activity, TrendingUp, AlertCircle, Loader2, Star, Bell, MessageSquare, ShieldCheck, Mail, Zap, Video } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ChatWindow from '../ChatWindow';
 
 const ProviderDashboard = () => {
+    const { showToast } = useToast();
     const { user: authUser } = useContext(AuthContext);
     const [bookings, setBookings] = useState([]);
     const [profile, setProfile] = useState(null);
@@ -61,18 +63,19 @@ const ProviderDashboard = () => {
     const handleSave = async () => {
         setIsSaving(true);
         try {
-            const { data } = await API.put('/providers/profile', { 
+            await API.put('/providers/profile', { 
                 experience: Number(editData.experience),
                 age: Number(editData.age),
                 city: editData.city,
                 serviceableCities: editData.serviceableCities.split(',').map(c => c.trim()).filter(c => c !== ''),
                 upiId: editData.upiId
             });
-            setProfile(data);
             setIsEditing(false);
+            showToast('Expert Profile Updated successfully', 'success');
+            fetchData();
         } catch (err) {
             console.error(err);
-            alert('Update Failed: ' + (err.response?.data?.message || err.message));
+            showToast('Update Failed: ' + (err.response?.data?.message || err.message), 'error');
         } finally {
             setIsSaving(false);
         }
@@ -81,9 +84,11 @@ const ProviderDashboard = () => {
     const updateStatus = async (bookingId, status) => {
         try {
             await API.put(`/bookings/${bookingId}/status`, { status });
-            setBookings(bookings.map(b => b._id === bookingId ? { ...b, status } : b));
+            showToast(`Task Pulse: ${status.toUpperCase()}! User notified.`, 'success');
+            fetchData();
         } catch (err) {
             console.error(err);
+            showToast('Status Update Failed: ' + (err.response?.data?.message || err.message), 'warning');
         }
     };
 

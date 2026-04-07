@@ -4,6 +4,7 @@ import API from '../api/axios';
 import { AuthContext } from '../context/AuthContext';
 import { MapPin, Star, Calendar, Clock, ShieldCheck, CheckCircle, ChevronLeft, ArrowRight, User, Activity, Briefcase, MessageSquare, Zap, Flag, AlertTriangle, ShieldAlert, Video, Camera, CreditCard, Lock, Unlock, Download } from 'lucide-react';
 import ReviewForm from '../components/reviews/ReviewForm';
+import { useToast } from '../context/ToastContext';
 import ReviewList from '../components/reviews/ReviewList';
 import ChatWindow from '../components/ChatWindow';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -11,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ProviderDetails = () => {
     const { id } = useParams();
     const { user } = useContext(AuthContext);
+    const { showToast } = useToast();
     const navigate = useNavigate();
     
     const [provider, setProvider] = useState(null);
@@ -72,7 +74,7 @@ const ProviderDetails = () => {
             setActiveBooking(data);
             setBookingSuccess(true);
         } catch (err) {
-            alert(err.response?.data?.message || 'Transmission Pulse Hub Busy');
+            showToast(err.response?.data?.message || 'Transmission Pulse Hub Busy', 'error');
         }
     };
 

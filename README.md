@@ -26,10 +26,10 @@ A premium, full-stack MERN application for finding and booking local professiona
 ### 1. Database Configuration
 1. Open `server/.env`.
 2. Update `MONGO_URI` with your connection string.
-3. (Optional) Provide a `GOOGLE_MAPS_API_KEY` for future map features.
+3. Provide a `GOOGLE_MAPS_API_KEY` for future map features  (Optional) .
 
 ### 2. Install Dependencies
-```bash
+```bash 
 # Install root (if any) or just go to subfolders
 # Backend
 cd server
